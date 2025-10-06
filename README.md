@@ -4,14 +4,11 @@ A messaging module for react native
 
 ## Installation
 
-
 ```sh
 npm install react-native-messager
 ```
 
-
 ## Usage
-
 
 ```js
 import { multiply } from 'react-native-messager';
@@ -20,7 +17,6 @@ import { multiply } from 'react-native-messager';
 
 const result = multiply(3, 7);
 ```
-
 
 ## Contributing
 
