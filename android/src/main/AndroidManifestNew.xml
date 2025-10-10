@@ -1,0 +1,87 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:installLocation="auto">
+  <uses-permission android:name="android.permission.READ_SMS" />
+  <uses-permission android:name="android.permission.WRITE_SMS" />
+  <uses-permission android:name="android.permission.SEND_SMS" />
+  <uses-permission android:name="android.permission.RECEIVE_SMS" />
+  <uses-permission android:name="android.permission.RECEIVE_MMS" />
+  <uses-permission android:name="android.provider.Telephony.SMS_RECEIVED" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+
+  <uses-permission
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="28" />
+
+  <uses-permission android:name="android.permission.READ_CONTACTS" />
+  <uses-feature android:name="android.hardware.telephony" />
+
+  <application>
+    <receiver android:name=".receivers.SmsReceiver"
+      android:permission="android.permission.BROADCAST_SMS"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.provider.Telephony.SMS_DELIVER" />
+      </intent-filter>
+    </receiver>
+
+    <!-- BroadcastReceiver that listens for incoming MMS messages -->
+    <receiver android:name=".receivers.MmsReceiver"
+      android:permission="android.permission.BROADCAST_WAP_PUSH"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
+        <data android:mimeType="application/vnd.wap.mms-message" />
+      </intent-filter>
+    </receiver>
+<receiver android:name=".receivers.SmsStatusSentReceiver" android:exported="false">
+    <intent-filter>
+        <action android:name="com.connectapp.receiver.SMS_SENT" />
+    </intent-filter>
+</receiver>
+<receiver android:name=".receivers.SmsStatusDeliveredReceiver" android:exported="false">
+    <intent-filter>
+        <action android:name="com.connectapp.receiver.SMS_DELIVERED" />
+    </intent-filter>
+</receiver>
+    <activity
+      android:name=".activity.ComposeSmsActivity"
+      android:exported="true"
+      >
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <action android:name="android.intent.action.SENDTO" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="sms" />
+        <data android:scheme="smsto" />
+        <data android:scheme="mms" />
+        <data android:scheme="mmsto" />
+      </intent-filter>
+    </activity>
+
+    <!-- Service that delivers messages from the phone "quick response" -->
+    <service android:name=".service.HeadlessSmsSendService"
+      android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
+      android:exported="true" >
+      <intent-filter>
+        <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="sms" />
+        <data android:scheme="smsto" />
+        <data android:scheme="mms" />
+        <data android:scheme="mmsto" />
+      </intent-filter>
+    </service>
+    <activity
+      android:name=".activity.NotificationClickActivity"
+      android:exported="true"
+      android:launchMode="singleTask"
+      android:taskAffinity=""
+      />
+  </application>
+</manifest>

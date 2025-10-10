@@ -4,6 +4,7 @@ import {
   multiply,
   setDefaultMessage,
   getAllMessages,
+  getConversationList
 } from 'react-native-messager';
 
 const result = multiply(3, 7);
@@ -16,7 +17,7 @@ export default function App() {
       });
     } catch (err) {
       console.log(err);
-      getAllMessages(null).then((messages) => {
+      getConversationList(null).then((messages) => {
         console.log('MESSAGES', messages);
       });
     }
