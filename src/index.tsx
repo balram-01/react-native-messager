@@ -72,23 +72,31 @@ export type Messages = {
 export type Conversation = {
   threadId: number;
   snippet: string;
-  timestamp: number;
+  date: number;
   read: boolean;
-  senderPhoneNumber: string;
+  phoneNumber: string;
   senderName: string;
-  senderPhotoUri: string;
+  senderPhoto: string;
   isScheduled: boolean;
   usesCustomTitle: boolean;
   isArchived: boolean;
   unreadCount: number;
 };
 
-export function getAllMessages(
+export async function getAllMessages(
   threadId: number | null,
   limit: number = 20,
   offset: number = 0
-): Promise<Messages[]> {
-  return Messager.getAllMessages(threadId, limit, offset);
+): Promise<any> {
+  const result = await Messager.getAllMessages(threadId, limit, offset);
+  if (typeof result === 'string') {
+    try {
+      return JSON.parse(result);
+    } catch (e) {
+      return result;
+    }
+  }
+  return result;
 }
 
 export function setDefaultMessage(): Promise<string> {
@@ -109,7 +117,7 @@ export function getConversationList(
   threadId: number | null,
   limit: number = 20,
   offset: number = 0
-): Promise<Message[]> {
+): Promise<Conversation[]> {
   return Messager.getConversationList(threadId, limit, offset);
 }
 
